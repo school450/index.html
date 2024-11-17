@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прием идей и предложений - Школа 450</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        textarea, input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .admin-section {
+            display: none;
+        }
+        .idea {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .idea-text {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .delete-btn {
+            background-color: #FF6347;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #ff2e1a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Прием идей и предложений</h1>
+        <textarea id="ideaInput" placeholder="Введите вашу идею или предложение..."></textarea>
+        <button onclick="submitIdea()">Отправить</button>
+        <hr>
+        <h2>Вход администратора</h2>
+        <input type="password" id="adminCode" placeholder="Введите код администратора">
+        <button onclick="loginAdmin()">Войти</button>
+        <div id="adminSection" class="admin-section">
+            <h2>Заявки:</h2>
+            <div id="ideasList"></div>
+        </div>
+    </div>
+    <script>
+        const adminPassword = "12345"; // Код для входа администратора
+        let ideas = [];
+
+        // Функция отправки идеи
+        function submitIdea() {
+            const ideaInput = document.getElementById('ideaInput');
+            const idea = ideaInput.value.trim();
+            if (idea) {
+                ideas.push(idea);
+                alert("Идея успешно отправлена!");
+                ideaInput.value = "";
+            } else {
+                alert("Пожалуйста, введите текст идеи.");
+            }
+        }
+
+        // Функция входа администратора
+        function loginAdmin() {
+            const code = document.getElementById('adminCode').value;
+            if (code === adminPassword) {
+                document.getElementById('adminSection').style.display = 'block';
+                displayIdeas();
+            } else {
+                alert("Неверный код администратора.");
+            }
+        }
+
+        // Функция отображения идей
+        function displayIdeas() {
+            const ideasList = document.getElementById('ideasList');
+            ideasList.innerHTML = "";
+            ideas.forEach((idea, index) => {
+                const ideaElement = document.createElement('div');
+                ideaElement.className = 'idea';
+
+                const ideaText = document.createElement('div');
+                ideaText.className = 'idea-text';
+                ideaText.textContent = `${index + 1}. ${idea}`;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-btn';
+                deleteButton.textContent = 'Удалить';
+                deleteButton.onclick = () => deleteIdea(index);
+
+                ideaElement.appendChild(ideaText);
+                ideaElement.appendChild(deleteButton);
+                ideasList.appendChild(ideaElement);
+            });
+        }
+
+        // Функция удаления идеи
+        function deleteIdea(index) {
+            ideas.splice(index, 1); // Удаляем идею из массива
+            displayIdeas(); // Обновляем отображение
+        }
+    </script>
+</body>
+</html>
+
